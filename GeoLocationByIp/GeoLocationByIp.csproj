@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="QrService\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>
