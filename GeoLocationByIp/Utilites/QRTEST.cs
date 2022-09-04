@@ -12,21 +12,21 @@ namespace GeoLocationByIp.Utilites
         {
             this.hostEnvironment = hostEnvironment;
         }
-        public QRTEST(QRCodeData data)
-    : base(data)
+        public QRTEST(QRCodeData data):base(data)
         {
         }
-        public Bitmap GetGraphic(int pixelsPerModule, Color blue, Color lightColor, Bitmap icon = null, int iconSizePercent = 15, int iconBorderWidth = 6, bool drawQuietZones = true)
+        public Bitmap GetGraphic(int pixelsPerModule, Color color, Color lightColor, Bitmap icon = null, int iconSizePercent = 15, int iconBorderWidth = 6, bool drawQuietZones = true)
         {
 
             int num = (base.QrCodeData.ModuleMatrix.Count - ((!drawQuietZones) ? 8 : 0)) * pixelsPerModule;
             int num2 = (!drawQuietZones) ? (4 * pixelsPerModule) : 0;
-            Bitmap bitmap = new Bitmap(num, num, PixelFormat.Format32bppArgb);
+            Bitmap bitmap = new Bitmap(num, num, PixelFormat.Format32bppPArgb);
+            bitmap.MakeTransparent(); ;
             using (Graphics graphics = Graphics.FromImage(bitmap))
-            {
+            {  
                 using (SolidBrush brush2 = new SolidBrush(lightColor))
                 {
-                    using (SolidBrush brush = new SolidBrush(blue))
+                    using (SolidBrush brush = new SolidBrush(color))
                     {
                         graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
@@ -39,14 +39,13 @@ namespace GeoLocationByIp.Utilites
                         float num6 = 0f;
                         if (flag)
                         {
-                            num3 = (float)(iconSizePercent * bitmap.Width) / 100f;
+                            num3 = (float)(iconSizePercent * bitmap.Width) / 60f;
                             num4 = (flag ? (num3 * (float)icon.Height / (float)icon.Width) : 0f);
                             num5 = ((float)bitmap.Width - num3) / 2f;
                             num6 = ((float)bitmap.Height - num4) / 2f;
                             RectangleF rect = new RectangleF(num5 - (float)iconBorderWidth, num6 - (float)iconBorderWidth, num3 + (float)(iconBorderWidth * 2), num4 + (float)(iconBorderWidth * 2));
                             CreateRoundedRectanglePath(rect, iconBorderWidth * 2);
                         }
-
                         for (int i = 0; i < num + num2; i += pixelsPerModule)
                         {
                             for (int j = 0; j < num + num2; j += pixelsPerModule)
@@ -54,7 +53,7 @@ namespace GeoLocationByIp.Utilites
                                 if (base.QrCodeData.ModuleMatrix[(j + pixelsPerModule) / pixelsPerModule - 1][(i + pixelsPerModule) / pixelsPerModule - 1])
                                 {
                                     Rectangle rect2 = new Rectangle(i - num2, j - num2, pixelsPerModule, pixelsPerModule);
-                                    graphics.FillRectangle(brush, rect2);
+                                    graphics.FillEllipse(brush, rect2);
                                 }
                                 else
                                 {
@@ -62,7 +61,6 @@ namespace GeoLocationByIp.Utilites
                                 }
                             }
                         }
-
                         if (flag)
                         {
                             RectangleF destRect = new RectangleF(num5, num6, num3, num4);

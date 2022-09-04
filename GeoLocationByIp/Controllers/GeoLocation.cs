@@ -24,13 +24,13 @@ namespace GeoLocationByIp.Controllers
         [HttpGet("GenerateQrCode")]
         public async Task<ActionResult> GenerateQrCode(string qrCodeText)
         {
-            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/", "527-0-0-0-10000-10000-410.jpg");
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/", "qr-logo.png");
             Bitmap overlay = new Bitmap(imagePath);
-
             QRCodeGenerator _qrCode = new QRCodeGenerator();
             QRCodeData _qRCodeData = _qrCode.CreateQrCode(qrCodeText, QRCodeGenerator.ECCLevel.H);
             QRTEST qRCode = new QRTEST(_qRCodeData);
-            Image qrCodeImage = qRCode.GetGraphic(200,Color.Blue,Color.White,overlay);
+            Color clr1Me = Color.FromArgb(13,103,203);
+            Image qrCodeImage = qRCode.GetGraphic(200, clr1Me, Color.White,overlay);
             var bytes = ImageToArray(qrCodeImage);
             return File(bytes,"image/bmp");
         }
